@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Delete, Param, Query, Body, HttpException, HttpStatus, Res } from '@nestjs/common';
+import { Controller, Post, Get, Delete, Param, Query, Body, HttpException,Response, HttpStatus, Res } from '@nestjs/common';
 import { Ecgdata12Service } from './ecgdata12.service';
 import { UserService } from '../users/user.service';
 import { Ecgdata12Params } from './view-models/ecgdata12-params.model';
@@ -17,7 +17,7 @@ export class Ecgdata12Controller {
     @ApiBody({ description: 'Array', type: Ecgdata12Params, isArray: true })
     async createEcgdata12(@Param('userId') userId: string, @Body() params: Ecgdata12Params[], @Res() res) {
         // move to enum
-        const keys = ['L1', 'L2', 'L3', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'aVR', 'aVL', 'aVF'];
+        const keys = ['I', 'II', 'III', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'aVR', 'aVL', 'aVF'];
 
         const body = [];
         params.forEach(obj => {
@@ -29,13 +29,13 @@ export class Ecgdata12Controller {
         });
 
         this.ecgdata12Service.createEcgdata12(body);
-       // this.userService.updateLasttime({ id, lasttime_12L: params[params.length - 1].time });
+        this.userService.updateLasttime({ userId, time: params[params.length - 1].time });
 
         return res.status(HttpStatus.OK).json({ statusCode: 200, message: 'success create'});
 
     }
 
-    @Get('users/:id/ecgdata12')
+    @Get('users/:userId/ecgdata12')
     @ApiQuery({ name: 'to', required: false })
     @ApiQuery({ name: 'limit', required: false })
     async findUserEcgdata(
@@ -43,16 +43,17 @@ export class Ecgdata12Controller {
         @Query('from') from: string,
         @Query('to') to?: string,
         @Query('limit') limit?: number,
-    ): Promise<Ecgdata12[]> {
+    ){
+		var id=parseInt(userId);
         if (!from) throw new HttpException('from is required', HttpStatus.BAD_REQUEST);
-
-        return this.ecgdata12Service.findEcgdata12ByUser({ userId, from, to, limit });
+		
+        return this.ecgdata12Service.findEcgdata12ByUser({ id, from, to, limit });
     }
 
-    @Get('users/:id/ecgdata12/all')
+    @Get('users/:userId/ecgdata12/all')
     async findUserEcgdata12_all(
         @Param('userId') userId: string,
-    ): Promise<Ecgdata12[]> {
+    ){
         return this.ecgdata12Service.findEcgdata12ByUser({ userId });
     }
 

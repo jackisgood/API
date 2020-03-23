@@ -10,7 +10,7 @@ export class User {
     @Column({ type: 'int' })
     userId: number;
 
-    @Column({ type: 'double' })
+    @Column({ type: 'int' })
   Status: number;
 
     @Column({ type: 'double' })

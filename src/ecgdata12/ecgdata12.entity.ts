@@ -7,13 +7,13 @@ export class Ecgdata12 {
   // @ObjectIdColumn()
   _id: ObjectID;
 
-  @ManyToOne(type => User, user => user.userId)
+  //@ManyToOne(type => User, user => user.userId)
   @JoinColumn()
   user: User;
-  @Column({ type: 'int' }) userId;
+  @Column({ type: 'int' }) userId:number;
   @Column({ type: 'double' })
   @Index()
-  timestamp: number;
+  time: number;
 
   @Column({ type: 'double' }) I: number;
   @Column({ type: 'double' }) II: number;

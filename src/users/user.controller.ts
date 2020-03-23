@@ -10,7 +10,7 @@ export class UserController {
     constructor(private readonly userService: UserService) { }
 
     @Get('users')
-    @ApiQuery({ name: 'userId', required: false })
+    //@ApiQuery({ name: 'userId', required: false })
     findAll(@Query() query): Promise<User[]> {
         //if (userId) {
         //    return this.userService.findByUserid(userId);
@@ -19,12 +19,15 @@ export class UserController {
     }
 
     @Get('users/:userId')
-    getUserById(@Param('userId') userId) {
-        return this.userService.getUserById(userId);
+    getUserById(@Param('userId') userId:string) {
+		var Id=parseInt(userId);
+        return this.userService.getUserById(Id);
     }
 
     @Post('users')
     createUser(@Body() params: UserParams): Promise<User> {
         return this.userService.createOne(params);
     }
+	
+	
 }
