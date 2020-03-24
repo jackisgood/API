@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
+import { promises } from 'dns';
 
 @Injectable()
 export class UserService {
@@ -41,6 +42,14 @@ export class UserService {
       await this.userRepository.update(user.userId , param.time );
       
     }
+  }
+
+  async updateStatus(params) {
+     params.userId=parseInt(params.userId);
+     params.Status_time=parseInt(params.Status_time);
+     params.Status=parseInt(params.Status);
+    await this.userRepository.update({userId:params.userId} , {Status_time:params.Status_time});
+    await this.userRepository.update({userId:params.userId} , {Status : params.Status} );
   }
 
 

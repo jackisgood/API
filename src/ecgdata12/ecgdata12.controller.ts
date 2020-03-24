@@ -29,7 +29,7 @@ export class Ecgdata12Controller {
         });
 
         this.ecgdata12Service.createEcgdata12(body);
-        this.userService.updateLasttime({ userId, time: params[params.length - 1].time });
+        //this.userService.updateLasttime({ userId, time: params[params.length - 1].time });
 
         return res.status(HttpStatus.OK).json({ statusCode: 200, message: 'success create'});
 

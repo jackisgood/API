@@ -4,6 +4,7 @@ import { Repository, Between, MoreThan, InsertResult } from 'typeorm';
 import { Ecgdata12 } from './ecgdata12.entity';
 import { User } from '../users/user.entity';
 import { UserService } from 'src/users/user.service';
+import { ApiAcceptedResponse } from '@nestjs/swagger';
 
 @Injectable()
 export class Ecgdata12Service {
@@ -24,6 +25,7 @@ export class Ecgdata12Service {
   async findEcgdata12ByUser(params) {
     // find all
     params.from=parseInt(params.from);
+    params.to=parseInt(params.to);
 
     if (!params.from && !params.limit && !params.to)
 		
@@ -41,14 +43,18 @@ export class Ecgdata12Service {
 
     //   //query.take = params.limit || 2304;
     //  }
-  
- 
-  
+
+    if (params.to) {
+     query.where.time= {$gte:params.from , $lte:params.to};
+    }
+    else{
+     query.where.time={$gte:params.from};
+     } 
+    
   
   if (Boolean((await this.userService.getUserById(params.id)).userId ))
-
   var _get = await this.ecgdata12Repository.find(query);
-      var cnt=0;
+  //var cnt=0;
   var I: Ecgdata12[] = [];
   var II: Ecgdata12[] = [];
   var III: Ecgdata12[] = [];
@@ -61,57 +67,23 @@ export class Ecgdata12Service {
   var aVR: Ecgdata12[] = [];
   var aVL: Ecgdata12[] = [];
   var aVF: Ecgdata12[] = [];
+  
   _get.forEach(p=>
     {
-      if (params.to) {
-        if(p.time > params.from && p.time < params.to && cnt<255)
-          {
-          var tmp = new Ecgdata12[25];
-          var tmp2 = new Ecgdata12[25];
-          var tmp3 = new Ecgdata12[25];
-          var tmp4 = new Ecgdata12[25];
-          var tmp5 = new Ecgdata12[25];
-          var tmp6 = new Ecgdata12[25];
-          var tmp7 = new Ecgdata12[25];
-          var tmp8 = new Ecgdata12[25];
-          var tmp9 = new Ecgdata12[25];
-          var tmp10 = new Ecgdata12[25];
-          var tmp11 = new Ecgdata12[25];
-          var tmp12 = new Ecgdata12[25];
-          tmp.userId = p.userId;
-          tmp.time=p.time;
-          I.push(tmp);
-          tmp.I=p.I;
-          tmp.II=p.II;
-          tmp.III=p.III;
-          tmp.V1 = p.V1;
-          tmp.V2 = p.V2;
-          tmp.V3 = p.V3;
-          tmp.V4 = p.V4;
-          tmp.V5 = p.V5;
-          tmp.V6 = p.V6;
-          tmp.aVR = p.aVR;
-          tmp.aVL = p.aVL;
-          tmp.aVF = p.aVF;
-          cnt++;
-        }
-      }
-      else {
-        if(p.time > params.from && cnt<255)
-          {
-            cnt++;
-            var tmp = [];
-            var tmp2 = [];
-            var tmp3 = [];
-            var tmp4 = [];
-            var tmp5 = [];
-            var tmp6 = [];
-            var tmp7 = [];
-            var tmp8 = [];
-            var tmp9 = [];
-            var tmp10 = [];
-            var tmp11 = [];
-            var tmp12 = [];
+     // cnt++;
+          var tmp : any = [];
+          var tmp2: any = [];;
+          var tmp3 : any = [];;
+          var tmp4 : any = [];;
+          var tmp5 : any = [];;
+          var tmp6 : any = [];;
+          var tmp7 : any = [];;
+          var tmp8 : any = [];;
+          var tmp9 :  any = [];;
+          var tmp10 :  any = [];;
+          var tmp11 : any = [];;
+          var tmp12 : any = [];;
+
             tmp.push(p.I);
             tmp.push(p.time);
             I.push(tmp);
@@ -148,11 +120,12 @@ export class Ecgdata12Service {
             tmp12.push(p.aVF);
             tmp12.push(p.time);
             aVF.push(tmp12);
-        }
-    }
-    });
+      }
+    );
+    //var aa: any = [];
     
     var kk={
+      'userId':params.id,
       'I':I,
       'II':II,
       'III':III,
@@ -165,8 +138,19 @@ export class Ecgdata12Service {
       'aVR':aVR,
       'aVL':aVL,
       'aVF':aVF,
-      'userId':params.userId,
+      
     };
+
+    // aa.push(kk);
+    // console.log(1);
+    // aa.push(kk);
+    // console.log(2);
+    // aa.push(kk);
+    // console.log(3);
+    // aa.push(kk);
+    // console.log(4);
+    // aa.push(kk);
+    // console.log(5);
     return kk;
   }
 

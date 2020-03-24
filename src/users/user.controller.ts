@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Param, Query, Body, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Param, Query, Body, HttpException, HttpStatus, Put } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from '../users/user.entity';
 import { UserParams } from './view-models/user-params.model';
@@ -27,6 +27,11 @@ export class UserController {
     @Post('users')
     createUser(@Body() params: UserParams): Promise<User> {
         return this.userService.createOne(params);
+    }
+
+    @Put('users')
+    userUpdateStatus(@Body() params: UserParams)  {
+        this.userService.updateStatus(params);
     }
 	
 	
